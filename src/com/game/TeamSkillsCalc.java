@@ -8,12 +8,12 @@ import com.player.Player;
 import com.player.Skill;
 
 public class TeamSkillsCalc {
-	
+
 	private static final int TEAMSIZE = 11;
 
 	public Map<Skill, Double> calc(List<Player> players) {
-		
-		if(players.size() > TEAMSIZE) {
+
+		if (players.size() > TEAMSIZE) {
 			throw new RuntimeException("Team size " + players.size());
 		}
 
@@ -21,8 +21,8 @@ public class TeamSkillsCalc {
 		for (Skill skill : Skill.values()) {
 			teamSkills.put(skill, calcTeamSkillFromTeam(skill, players));
 		}
-		
-		teamSkills.put(Skill.TEAMSIZE, 1.0 * players.size()/TEAMSIZE);
+
+		teamSkills.put(Skill.TEAMSIZE, 1.0 * players.size() / TEAMSIZE);
 
 		return teamSkills;
 
