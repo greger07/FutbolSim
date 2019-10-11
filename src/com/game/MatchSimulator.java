@@ -3,6 +3,9 @@ package com.game;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import com.player.Circumstances;
 import com.player.MatchResult;
@@ -12,84 +15,141 @@ import com.team.Team;
 
 public class MatchSimulator {
 
+	private static final int COEFFICIENT = 50;
+	private static final int MAX_RANDOM_VALUE = 100;
+
 	public MatchResult playMatch(Team t1, Team t2, Map<Circumstances, Double> circ) {
 
-		// prasukti team skilus
+		// team skills values
 		Map<Skill, Double> team1 = calc(t1);
 		Map<Skill, Double> team2 = calc(t2);
 
-		Double team1SkillsValWithoutGK = 0.0;
-		Double team2SkillsValWithoutGK = 0.0;
+		int chanceToWinCoefficientTeam1 = chanceToWin(
+				calcSkillsValues(team1, (skill) -> !skill.equals(Skill.GOALTENDING))
+						- calcSkillsValues(team2, (skill) -> !skill.equals(Skill.GOALTENDING)));
+		int chanceToWinCoefficientTeam2 = 100 - chanceToWinCoefficientTeam1;
 
-		team1SkillsValWithoutGK = calcSkillsValueWithoutGK(team1);
-		team2SkillsValWithoutGK = calcSkillsValueWithoutGK(team2);
+		int chanceToScoreCoefficientTeam1 = chanceToScore(calcSkillsValues(team1,
+				(skill) -> skill.equals(Skill.GOALTENDING) || skill.equals(Skill.OFFENCE))
+				- calcSkillsValues(team2, (skill) -> skill.equals(Skill.GOALTENDING) || skill.equals(Skill.OFFENCE)));
+		int chanceToScoreCoefficientTeam2 = 100 - chanceToScoreCoefficientTeam1;
 
-		Double gk = 0.0;
-		Double def = 0.0;
-		Double plm = 0.0;
-		Double off = 0.0;
+		//
+		int chanceToDefendCoefficientTeam1 = chanceToDefend(
+				calcSkillsValues(team1, (skill) -> skill.equals(Skill.DEFENCE))
+						- calcSkillsValues(team2, (skill) -> skill.equals(Skill.DEFENCE)));
+		int chanceToDefendCoefficientTeam2 = 100 - chanceToDefendCoefficientTeam1;
 
-		// skills total
-		gk = team1.getOrDefault(Skill.GOALTENDING, 0.0) - team2.getOrDefault(Skill.GOALTENDING, 0.0);		
-		def = team1.getOrDefault(Skill.DEFENCE, 0.0) - team2.getOrDefault(Skill.DEFENCE, 0.0);
-		plm = team1.getOrDefault(Skill.PLAYMAKING, 0.0) - team2.getOrDefault(Skill.PLAYMAKING, 0.0);
-		off = team1.getOrDefault(Skill.OFFENCE, 0.0) - team2.getOrDefault(Skill.OFFENCE, 0.0);
+		int[] matchScore = simulateMatch(chanceToWinCoefficientTeam1, chanceToWinCoefficientTeam2,
+				chanceToScoreCoefficientTeam1, chanceToScoreCoefficientTeam2, chanceToDefendCoefficientTeam1,
+				chanceToDefendCoefficientTeam2);
 
-		int chanceToWinTeam1 = 50;
-
-		Double winCoeficient = def + plm + off;
-		if (winCoeficient < 0) {
-			chanceToWinTeam1 = (int) (chanceToWinTeam1 - winCoeficient * 5);
-		} else {
-			chanceToWinTeam1 = (int) (chanceToWinTeam1 + winCoeficient * 5);
-		}
-		int chanceToScoreTeam1 = 50;
-
-		Double chanceToScoreCoeficinet = gk + off;
-		if (chanceToScoreCoeficinet < 0) {
-			chanceToScoreTeam1 = (int) (chanceToScoreTeam1 - chanceToScoreCoeficinet * 5);
-		} else {
-			chanceToScoreTeam1 = (int) (chanceToWinTeam1 + chanceToScoreCoeficinet * 5);
-		}
-
-		int chanceToDefendTeam1 = 50;
-
-		Double defendCoeficient = def;
-		if (winCoeficient < 0) {
-			chanceToDefendTeam1 = (int) (chanceToDefendTeam1 - defendCoeficient * 5);
-		} else {
-			chanceToDefendTeam1 = (int) (chanceToDefendTeam1 + defendCoeficient * 5);
-		}
-
-		// MatchR
 		MatchResult mResult = new MatchResult();
-		mResult.setTeam1Goals(calcGoals(0));
-		mResult.setTeam1Goals(calcGoals(0));
+		mResult.setTeam1Goals(matchScore[0]);
+		mResult.setTeam2Goals(matchScore[1]);
+
 		return mResult;
 
 	}
 
-	private Double calcSkillsValueWithoutGK(Map<Skill, Double> team) {
+	private int[] simulateMatch(int chanceToWinCoefficientTeam1, int chanceToWinCoefficientTeam2,
+			int chanceToScoreCoefficientTeam1, int chanceToScoreCoefficientTeam2, int chanceToDefendCoefficientTeam1,
+			int chanceToDefendCoefficientTeam2) {
+
+		int[] matchResult = new int[2];
+
+		for (int i = 0; i < 90; i++) {
+			if (doAttack(chanceToWinCoefficientTeam1)) {
+				if (tryToScoreGoal(chanceToScoreCoefficientTeam1)) {
+					if (isShotSuccess(chanceToDefendCoefficientTeam2/4)) {
+						matchResult[0] += 1;
+					}
+				}
+			} else {
+				
+				if (tryToScoreGoal(chanceToScoreCoefficientTeam2)) {
+					if (isShotSuccess(chanceToDefendCoefficientTeam1/4)) {
+						matchResult[1] += 1;
+					}
+				}
+			}
+		}
+		matchResult[0] = matchResult[0];
+		matchResult[1] = matchResult[1];
+		return matchResult;
+	}
+
+	private Boolean isShotSuccess(int chanceToDefendCoefficientTeam) {
+		if (getRandomNum() <= chanceToDefendCoefficientTeam) {
+			return true;
+		}
+		return false;
+	}
+
+	private Boolean tryToScoreGoal(int chanceToScoreCoefficientTeam) {
+
+		if (getRandomNum() <= chanceToScoreCoefficientTeam) {
+			return true;
+		}
+		return false;
+	}
+
+	private Boolean doAttack(int chanceToWinCoefficientTeam) {
+
+		if (getRandomNum() <= chanceToWinCoefficientTeam) {
+			return true;
+		}
+		return false;
+	}
+
+	private int getRandomNum() {
+		return new Random().nextInt(MAX_RANDOM_VALUE);
+	}
+
+	private int chanceToWin(double d) {
+		int value = 0;
+		if (d < 0) {
+			value = (int) (COEFFICIENT - (d * 5));
+		} else {
+			value = (int) (COEFFICIENT + (d * 5));
+		}
+		return value;
+	}
+
+	private int chanceToScore(double d) {
+		int value = 0;
+		if (d < 0) {
+			value = (int) (COEFFICIENT - (d * 5));
+		} else {
+			value = (int) (COEFFICIENT + (d * 5));
+		}
+		return value;
+	}
+	private int chanceToDefend(double d) {
+		int value = 0;
+		if (d < 0) {
+			value = (int) (COEFFICIENT - (d * 5));
+		} else {
+			value = (int) (COEFFICIENT + (d * 5));
+		}
+		return value;
+	}
+
+//	private int chanceToDefend(double d) {
+//		return (int) (COEFFICIENT + (d * (d < 0 ? -5 : 5)));
+//	}
+
+	// team skillas gynyba
+	private Double calcSkillsValues(Map<Skill, Double> team, Predicate<Skill> condition) {
 
 		Double value = 0.0;
 		for (Skill skill : team.keySet()) {
-			if (!skill.equals(Skill.GOALTENDING)) {
+			if (condition.test(skill)) {
 				value += team.get(skill);
 			}
 		}
 
 		return value;
-	}
-
-	private int chanceToWinTeam() {
-
-		
-		return 0;
-	}
-
-	private int calcGoals(Integer skillsTotalTeam) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	private Map<Skill, Double> calc(Team t) {

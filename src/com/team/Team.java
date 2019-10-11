@@ -37,4 +37,12 @@ public class Team {
 		return bench;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
 }

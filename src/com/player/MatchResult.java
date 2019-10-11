@@ -20,4 +20,11 @@ public class MatchResult {
 	public void setTeam2Goals(int team2Goals) {
 		this.team2Goals = team2Goals;
 	}
+
+	@Override
+	public String toString() {
+		return "MatchResult [team1Goals=" + team1Goals + ", team2Goals=" + team2Goals + "]";
+	}
+	
+	
 }
