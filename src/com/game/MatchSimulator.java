@@ -16,7 +16,12 @@ import com.team.Team;
 public class MatchSimulator {
 
 	private static final int COEFFICIENT = 50;
-	private static final int MAX_RANDOM_VALUE = 100;
+
+	private RandomNumberProvider rnd;
+
+	public MatchSimulator(RandomNumberProvider rnd) {
+		this.rnd = rnd;
+	}
 
 	public MatchResult playMatch(Team t1, Team t2, Map<Circumstances, Double> circ) {
 
@@ -24,122 +29,67 @@ public class MatchSimulator {
 		Map<Skill, Double> team1 = calc(t1);
 		Map<Skill, Double> team2 = calc(t2);
 
-		int chanceToWinCoefficientTeam1 = chanceToWin(
-				calcSkillsValues(team1, (skill) -> !skill.equals(Skill.GOALTENDING))
-						- calcSkillsValues(team2, (skill) -> !skill.equals(Skill.GOALTENDING)));
-		int chanceToWinCoefficientTeam2 = 100 - chanceToWinCoefficientTeam1;
+		ChanceTo ts1 = new ChanceTo();
 
-		int chanceToScoreCoefficientTeam1 = chanceToScore(calcSkillsValues(team1,
-				(skill) -> skill.equals(Skill.GOALTENDING) || skill.equals(Skill.OFFENCE))
-				- calcSkillsValues(team2, (skill) -> skill.equals(Skill.GOALTENDING) || skill.equals(Skill.OFFENCE)));
-		int chanceToScoreCoefficientTeam2 = 100 - chanceToScoreCoefficientTeam1;
+		ts1.setWin(chanceToWin(calcSkillsSubstract(team1, team2,
+				(skill) -> skill.equals(Skill.DEFENCE) || skill.equals(Skill.PLAYMAKING))));
 
-		//
-		int chanceToDefendCoefficientTeam1 = chanceToDefend(
-				calcSkillsValues(team1, (skill) -> skill.equals(Skill.DEFENCE))
-						- calcSkillsValues(team2, (skill) -> skill.equals(Skill.DEFENCE)));
-		int chanceToDefendCoefficientTeam2 = 100 - chanceToDefendCoefficientTeam1;
+		ts1.setScore(chanceToScore(calcSkillsSubstract(team1, team2,
+				(skill) -> skill.equals(Skill.GOALTENDING) || skill.equals(Skill.OFFENCE))));
 
-		int[] matchScore = simulateMatch(chanceToWinCoefficientTeam1, chanceToWinCoefficientTeam2,
-				chanceToScoreCoefficientTeam1, chanceToScoreCoefficientTeam2, chanceToDefendCoefficientTeam1,
-				chanceToDefendCoefficientTeam2);
+		ts1.setDefend(chanceToDefend(calcSkillsSubstract(team1, team2, (skill) -> skill.equals(Skill.DEFENCE))));
 
-		MatchResult mResult = new MatchResult();
-		mResult.setTeam1Goals(matchScore[0]);
-		mResult.setTeam2Goals(matchScore[1]);
-
-		return mResult;
+		return simulateMatch(ts1, new ChanceTo(ts1));
 
 	}
 
-	private int[] simulateMatch(int chanceToWinCoefficientTeam1, int chanceToWinCoefficientTeam2,
-			int chanceToScoreCoefficientTeam1, int chanceToScoreCoefficientTeam2, int chanceToDefendCoefficientTeam1,
-			int chanceToDefendCoefficientTeam2) {
+	private double calcSkillsSubstract(Map<Skill, Double> team1, Map<Skill, Double> team2, Predicate<Skill> condition) {
+		return calcSkillsValues(team1, condition) - calcSkillsValues(team2, condition);
+	}
 
-		int[] matchResult = new int[2];
+	private MatchResult simulateMatch(ChanceTo ts1, ChanceTo ts2) {
 
-		for (int i = 0; i < 90; i++) {
-			if (doAttack(chanceToWinCoefficientTeam1)) {
-				if (tryToScoreGoal(chanceToScoreCoefficientTeam1)) {
-					if (isShotSuccess(chanceToDefendCoefficientTeam2/4)) {
-						matchResult[0] += 1;
+		MatchResult m = new MatchResult();
+
+		for (int i = 0; i < 15; i++) {
+
+			if (rnd() <= ts1.getWin()) {
+				if (rnd() <= ts1.getScore()) {
+					if (rnd() > ts2.getDefend()) {
+						m.setTeam1Goals(m.getTeam1Goals() + 1);
 					}
 				}
-			} else {
-				
-				if (tryToScoreGoal(chanceToScoreCoefficientTeam2)) {
-					if (isShotSuccess(chanceToDefendCoefficientTeam1/4)) {
-						matchResult[1] += 1;
+			}
+			if (rnd() <= ts2.getWin()) {
+				if (rnd() <= ts2.getScore()) {
+					if (rnd() > ts1.getDefend()) {
+						m.setTeam2Goals(m.getTeam2Goals() + 1);
 					}
 				}
 			}
 		}
-		matchResult[0] = matchResult[0];
-		matchResult[1] = matchResult[1];
-		return matchResult;
+		return m;
 	}
 
-	private Boolean isShotSuccess(int chanceToDefendCoefficientTeam) {
-		if (getRandomNum() <= chanceToDefendCoefficientTeam) {
-			return true;
-		}
-		return false;
-	}
-
-	private Boolean tryToScoreGoal(int chanceToScoreCoefficientTeam) {
-
-		if (getRandomNum() <= chanceToScoreCoefficientTeam) {
-			return true;
-		}
-		return false;
-	}
-
-	private Boolean doAttack(int chanceToWinCoefficientTeam) {
-
-		if (getRandomNum() <= chanceToWinCoefficientTeam) {
-			return true;
-		}
-		return false;
-	}
-
-	private int getRandomNum() {
-		return new Random().nextInt(MAX_RANDOM_VALUE);
+	private int rnd() {
+		return rnd.rnd();
 	}
 
 	private int chanceToWin(double d) {
-		int value = 0;
-		if (d < 0) {
-			value = (int) (COEFFICIENT - (d * 5));
-		} else {
-			value = (int) (COEFFICIENT + (d * 5));
-		}
-		return value;
+
+		return (int) (COEFFICIENT + (d * 5));
 	}
 
 	private int chanceToScore(double d) {
-		int value = 0;
-		if (d < 0) {
-			value = (int) (COEFFICIENT - (d * 5));
-		} else {
-			value = (int) (COEFFICIENT + (d * 5));
-		}
-		return value;
+
+		return (int) (COEFFICIENT + (d * 5));
 	}
+
 	private int chanceToDefend(double d) {
-		int value = 0;
-		if (d < 0) {
-			value = (int) (COEFFICIENT - (d * 5));
-		} else {
-			value = (int) (COEFFICIENT + (d * 5));
-		}
-		return value;
+
+		return (int) (COEFFICIENT + (d * 5));
 	}
 
-//	private int chanceToDefend(double d) {
-//		return (int) (COEFFICIENT + (d * (d < 0 ? -5 : 5)));
-//	}
-
-	// team skillas gynyba
 	private Double calcSkillsValues(Map<Skill, Double> team, Predicate<Skill> condition) {
 
 		Double value = 0.0;
@@ -148,7 +98,6 @@ public class MatchSimulator {
 				value += team.get(skill);
 			}
 		}
-
 		return value;
 	}
 

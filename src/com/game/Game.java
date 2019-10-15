@@ -21,37 +21,39 @@ public class Game {
 		ArrayList<Player> team1Players = new ArrayList<>();
 		
 		team1Players.add(new Player("GK", new SkillValue(Skill.GOALTENDING, 1.0)));
-		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.25)));
-		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.25)));
-		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.25)));
-		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.25), new SkillValue(Skill.PLAYMAKING, 1.0)));
-		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.25), new SkillValue(Skill.PLAYMAKING, 1.0)));
-		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.25), new SkillValue(Skill.PLAYMAKING, 1.0)));
-		team1Players.add(new Player("FW", new SkillValue(Skill.DEFENCE, 0.25), new SkillValue(Skill.PLAYMAKING, 1.0)));
-		team1Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.25), new SkillValue(Skill.OFFENCE, 1.0)));
-		team1Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.25), new SkillValue(Skill.OFFENCE, 1.0)));
-		team1Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.25), new SkillValue(Skill.OFFENCE, 1.0)));
+		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team1Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team1Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team1Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 0.0)));
+		team1Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 0.0)));
 		
 		t1.setPlayers(team1Players);
 		
 		ArrayList<Player> team2Players = new ArrayList<>();
 		
-		team2Players.add(new Player("GK", new SkillValue(Skill.GOALTENDING, 0.0)));
-		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("FW", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
-		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 0.0)));
-		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 0.0)));
-		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 0.0)));
-		
+		team2Players.add(new Player("GK", new SkillValue(Skill.GOALTENDING, 1.0)));
+		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team2Players.add(new Player("DF", new SkillValue(Skill.DEFENCE, 1.0), new SkillValue(Skill.PLAYMAKING, 0.0)));
+		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team2Players.add(new Player("MF", new SkillValue(Skill.DEFENCE, 0.0), new SkillValue(Skill.PLAYMAKING, 1.0)));
+		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 1.0)));
+		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 1.0)));
 		t2.setPlayers(team2Players);
 		
-		MatchSimulator ms = new MatchSimulator();
-		System.out.println( ms.playMatch(t1, t2, null));
+		MatchSimulator ms = new MatchSimulator(new RandomNumberProvider());
+		for (int i = 0; i < 10; i++) {
+			System.out.println( ms.playMatch(t2, t1, null));
+		}
+//		System.out.println( ms.playMatch(t1, t2, null));
 		
 		
 	}
