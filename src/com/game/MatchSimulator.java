@@ -75,22 +75,22 @@ public class MatchSimulator {
 		return rnd.rnd();
 	}
 
-	private int chanceToWin(double d) {
+	public int chanceToWin(double d) {
 
 		return (int) (COEFFICIENT + (d * 5));
 	}
 
-	private int chanceToScore(double d) {
+	public int chanceToScore(double d) {
 
 		return (int) (COEFFICIENT + (d * 5));
 	}
 
-	private int chanceToDefend(double d) {
+	public int chanceToDefend(double d) {
 
 		return (int) (COEFFICIENT + (d * 5));
 	}
 
-	private Double calcSkillsValues(Map<Skill, Double> team, Predicate<Skill> condition) {
+	public Double calcSkillsValues(Map<Skill, Double> team, Predicate<Skill> condition) {
 
 		Double value = 0.0;
 		for (Skill skill : team.keySet()) {

@@ -6,21 +6,16 @@ public class ChanceTo {
 	private Integer win;
 	private Integer score;
 	private Integer defend;
-	
 
 	public ChanceTo(ChanceTo ct) {
 		win = HUNDREAD_PERCENTS - ct.win;
 		score = HUNDREAD_PERCENTS - ct.score;
 		defend = HUNDREAD_PERCENTS - ct.defend;
 	}
-	
-	
 
 	public ChanceTo() {
 		super();
 	}
-
-
 
 	public Integer getWin() {
 		return win;
@@ -29,7 +24,7 @@ public class ChanceTo {
 	public void setWin(Integer win) {
 		this.win = win;
 	}
-	
+
 	public void setWin100_win(Integer win) {
 		this.win = 100 - win;
 	}
@@ -41,7 +36,7 @@ public class ChanceTo {
 	public void setScore(Integer score) {
 		this.score = score;
 	}
-	
+
 	public void setScore100_score(Integer score) {
 		this.score = 100 - score;
 	}
@@ -57,6 +52,5 @@ public class ChanceTo {
 	public void setDefend100_defend(Integer defend) {
 		this.defend = 100 - defend;
 	}
-	
-	
+
 }

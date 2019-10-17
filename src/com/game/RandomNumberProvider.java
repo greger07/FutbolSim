@@ -8,8 +8,8 @@ public class RandomNumberProvider {
 
 	public int rnd() {
 
-		//return random.nextInt(MAX_RANDOM_VALUE)+1;
-		
+		// return random.nextInt(MAX_RANDOM_VALUE)+1;
+
 		return random.nextInt(MAX_RANDOM_VALUE)+1;
 	}
 }
