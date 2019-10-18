@@ -9,7 +9,7 @@ import com.player.Skill;
 
 public class TeamSkillsCalc {
 
-	private static final int TEAMSIZE = 11;
+	public static final int TEAMSIZE = 11;
 
 	public Map<Skill, Double> calc(List<Player> players) {
 

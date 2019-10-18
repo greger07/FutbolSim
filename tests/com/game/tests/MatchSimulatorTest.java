@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.game.MatchSimulator;
+import com.game.MatchSimulatorImpl;
 import com.game.RandomNumberProvider;
 import com.player.MatchResult;
 import com.player.Player;
@@ -60,7 +60,7 @@ public class MatchSimulatorTest {
 		
 		//MatchSimulator ms = new MatchSimulator(() -> 50);
 		
-		MatchSimulator ms = new MatchSimulator(new RandomNumberProvider() {
+		MatchSimulatorImpl ms = new MatchSimulatorImpl(new RandomNumberProvider() {
 			
 			@Override
 			public int calcPropability() {
@@ -98,7 +98,7 @@ public class MatchSimulatorTest {
 		
 		//MatchSimulator ms = new MatchSimulator(() -> 50);
 		
-		MatchSimulator ms = new MatchSimulator(new RandomNumberProvider() {
+		MatchSimulatorImpl ms = new MatchSimulatorImpl(new RandomNumberProvider() {
 			
 			@Override
 			public int calcPropability() {
@@ -136,7 +136,7 @@ public class MatchSimulatorTest {
 		
 		//MatchSimulator ms = new MatchSimulator(() -> 50);
 		
-		MatchSimulator ms = new MatchSimulator(null);
+		MatchSimulatorImpl ms = new MatchSimulatorImpl(null);
 		teamSkills = ms.calc(t1);
 		double value = 0;
 		for (Skill skill : teamSkills.keySet()) {

@@ -3,8 +3,6 @@ package com.game;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.player.Circumstances;
@@ -13,7 +11,7 @@ import com.player.Player;
 import com.player.Skill;
 import com.team.Team;
 
-public class MatchSimulator {
+public class MatchSimulatorImpl implements IMatchSimulator{
 
 	private static final int COEFFICIENT = 50;
 
@@ -21,14 +19,14 @@ public class MatchSimulator {
 
 	private RandomNumberProvider rnd;
 
-	public MatchSimulator(RandomNumberProvider rnd) {
+	public MatchSimulatorImpl(RandomNumberProvider rnd) {
 		this.rnd = rnd;
 	}
-	
+	@Override
 	public MatchResult playMatch(Team t1, Team t2) {
 		return playMatch(t1, t2, null);
 	}
-
+	
 	public MatchResult playMatch(Team t1, Team t2, Map<Circumstances, Double> circ) {
 
 		Map<Skill, Double> team1 = calc(t1);

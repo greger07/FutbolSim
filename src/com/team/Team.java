@@ -1,11 +1,9 @@
 package com.team;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.game.TeamSkillsCalc;
 import com.player.Player;
 import com.player.Skill;
 
@@ -15,9 +13,9 @@ public class Team {
 
 	private Map<Skill, Double> skills = new HashMap<>();
 
-	private List<Player> players = new ArrayList<>();
+	private List<Player> players = new TeamList();
 
-	private List<Player> bench = new ArrayList<>();
+	private List<Player> bench = new TeamList();
 	
 	public Team() {}
 	
