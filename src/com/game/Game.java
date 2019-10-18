@@ -9,11 +9,12 @@ import com.team.Team;
 
 public class Game {
 
-	public static void main(String[] args) {
 
+	public void start() {
+		
 		Team t1 = new Team();
 		Team t2 = new Team();
-
+	
 		t1.setName("Animals");
 		t2.setName("Birds");
 
@@ -47,11 +48,12 @@ public class Game {
 		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 1.0)));
 		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 1.0)));
 		t2.setPlayers(team2Players);
-
+		
 		MatchSimulator ms = new MatchSimulator(new RandomNumberProvider());
 		for (int i = 0; i < 10; i++) {
 			System.out.println(ms.playMatch(t1, t2, null));
 		}
 
 	}
+	
 }

@@ -17,6 +17,8 @@ public class MatchSimulator {
 
 	private static final int COEFFICIENT = 50;
 
+	private static final int MATCH_CYCLE = 15;
+
 	private RandomNumberProvider rnd;
 
 	public MatchSimulator(RandomNumberProvider rnd) {
@@ -25,7 +27,6 @@ public class MatchSimulator {
 
 	public MatchResult playMatch(Team t1, Team t2, Map<Circumstances, Double> circ) {
 
-		// team skills values
 		Map<Skill, Double> team1 = calc(t1);
 		Map<Skill, Double> team2 = calc(t2);
 
@@ -51,46 +52,40 @@ public class MatchSimulator {
 
 		MatchResult m = new MatchResult();
 
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < MATCH_CYCLE; i++) {
 
-			if (rnd() <= ts1.getWin()) {
-				if (rnd() <= ts1.getScore()) {
-					if (rnd() > ts2.getDefend()) {
-						m.setTeam1Goals(m.getTeam1Goals() + 1);
-					}
-				}
-			}
-			if (rnd() <= ts2.getWin()) {
-				if (rnd() <= ts2.getScore()) {
-					if (rnd() > ts1.getDefend()) {
-						m.setTeam2Goals(m.getTeam2Goals() + 1);
-					}
-				}
-			}
+			if (isGoalScored(ts1, ts2))
+				m.setTeam1Goals(m.getTeam1Goals() + 1);
+			if (isGoalScored(ts2, ts1))
+				m.setTeam2Goals(m.getTeam1Goals() + 1);
 		}
 		return m;
+	}
+
+	private boolean isGoalScored(ChanceTo attacking, ChanceTo defending) {
+		return (rnd() <= attacking.getWin()) && (rnd() <= attacking.getScore()) && (rnd() > defending.getDefend());
 	}
 
 	private int rnd() {
 		return rnd.rnd();
 	}
 
-	public int chanceToWin(double d) {
+	private int chanceToWin(double d) {
 
 		return (int) (COEFFICIENT + (d * 5));
 	}
 
-	public int chanceToScore(double d) {
+	private int chanceToScore(double d) {
 
 		return (int) (COEFFICIENT + (d * 5));
 	}
 
-	public int chanceToDefend(double d) {
+	private int chanceToDefend(double d) {
 
 		return (int) (COEFFICIENT + (d * 5));
 	}
 
-	public Double calcSkillsValues(Map<Skill, Double> team, Predicate<Skill> condition) {
+	private Double calcSkillsValues(Map<Skill, Double> team, Predicate<Skill> condition) {
 
 		Double value = 0.0;
 		for (Skill skill : team.keySet()) {
@@ -101,7 +96,7 @@ public class MatchSimulator {
 		return value;
 	}
 
-	private Map<Skill, Double> calc(Team t) {
+	public Map<Skill, Double> calc(Team t) {
 
 		Map<Skill, Double> teamSkills = new HashMap<>();
 		for (Skill skill : Skill.values()) {
