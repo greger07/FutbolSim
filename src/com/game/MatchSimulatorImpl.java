@@ -95,7 +95,7 @@ public class MatchSimulatorImpl implements IMatchSimulator{
 		return value;
 	}
 
-	public Map<Skill, Double> calc(Team t) {
+	protected Map<Skill, Double> calc(Team t) {
 
 		Map<Skill, Double> teamSkills = new HashMap<>();
 		for (Skill skill : Skill.values()) {

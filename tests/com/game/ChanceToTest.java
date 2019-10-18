@@ -1,4 +1,4 @@
-package com.game.tests;
+package com.game;
 
 import org.junit.Assert;
 import org.junit.Test;

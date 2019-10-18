@@ -49,9 +49,9 @@ public class Game {
 		team2Players.add(new Player("FW", new SkillValue(Skill.PLAYMAKING, 0.0), new SkillValue(Skill.OFFENCE, 1.0)));
 		t2.setPlayers(team2Players);
 		
-		MatchSimulatorImpl ms = new MatchSimulatorImpl(new RandomNumberProviderImpl());
+		IMatchSimulator ms = MatchSimulatorFactory.createInstance();
 		for (int i = 0; i < 10; i++) {
-			System.out.println(ms.playMatch(t1, t2, null));
+			System.out.println(ms.playMatch(t1, t2));
 		}
 
 	}
