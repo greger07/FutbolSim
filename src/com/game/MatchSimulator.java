@@ -24,6 +24,10 @@ public class MatchSimulator {
 	public MatchSimulator(RandomNumberProvider rnd) {
 		this.rnd = rnd;
 	}
+	
+	public MatchResult playMatch(Team t1, Team t2) {
+		return playMatch(t1, t2, null);
+	}
 
 	public MatchResult playMatch(Team t1, Team t2, Map<Circumstances, Double> circ) {
 
@@ -63,12 +67,9 @@ public class MatchSimulator {
 	}
 
 	private boolean isGoalScored(ChanceTo attacking, ChanceTo defending) {
-		return (rnd() <= attacking.getWin()) && (rnd() <= attacking.getScore()) && (rnd() > defending.getDefend());
+		return (rnd.calcPropability() <= attacking.getWin()) && (rnd.calcPropability() <= attacking.getScore()) && (rnd.calcPropability() > defending.getDefend());
 	}
 
-	private int rnd() {
-		return rnd.rnd();
-	}
 
 	private int chanceToWin(double d) {
 
